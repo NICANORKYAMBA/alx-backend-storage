@@ -5,8 +5,8 @@ Created on Mon July  17 14:22:25 2023
 
 @Author: Nicanor Kyamba
 """
-from pymongo.collection import Collection
 from typing import List
+from pymongo.collection import Collection
 
 
 def list_all(mongo_collection: Collection) -> List[dict]:
