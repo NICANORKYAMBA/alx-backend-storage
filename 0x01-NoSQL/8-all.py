@@ -19,7 +19,9 @@ def list_all(mongo_collection: Collection):
     Returns:
         List[dict]: list of documents
     """
-    documents = []
-    for document in mongo_collection.find():
-        documents.append(document)
-    return documents
+    documents = mongo_collection.find()
+
+    if documents.count() == 0:
+        return []
+    else:
+        return documents
