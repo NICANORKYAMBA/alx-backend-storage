@@ -22,6 +22,7 @@ if __name__ == "__main__":
 
     """Get the number of logs for each method"""
     methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
+    print("Methods:")
     for method in methods:
         count = logs_collection.count_documents({"method": method})
         print(f"\tmethod {method}: {count}")
