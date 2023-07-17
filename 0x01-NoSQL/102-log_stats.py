@@ -45,6 +45,7 @@ if __name__ == "__main__":
         {"$limit": 10},
         {"$project": {
             "_id": 0,
+            "ip": "$_id",
             "count": 1
             }}
     ])
