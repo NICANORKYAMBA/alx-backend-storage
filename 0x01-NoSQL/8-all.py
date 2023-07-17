@@ -9,7 +9,7 @@ from typing import List
 from pymongo.collection import Collection
 
 
-def list_all(mongo_collection: Collection) -> List[dict]:
+def list_all(mongo_collection: Collection):
     """
     List all documents in a collection
 
