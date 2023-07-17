@@ -8,7 +8,9 @@ Created on Mon July 17 14:50:00 2023
 from pymongo.collection import Collection
 
 
-def update_topics(mongo_collection: Collection, name: str, topics: list) -> None:
+def update_topics(
+        mongo_collection: Collection,
+        name: str, topics: list) -> None:
     """
     Updates the topics of a collection.
 
