@@ -6,10 +6,9 @@ Created on Mon July  17 14:22:25 2023
 @Author: Nicanor Kyamba
 """
 from typing import List
-from pymongo.collection import Collection
 
 
-def list_all(mongo_collection: Collection):
+def list_all(mongo_collection) -> List[dict]:
     """
     List all documents in a collection
 
@@ -19,9 +18,7 @@ def list_all(mongo_collection: Collection):
     Returns:
         List[dict]: list of documents
     """
-    documents = mongo_collection.find()
-
-    if documents.count() == 0:
-        return []
-    else:
-        return documents
+    documents = []
+    for document in mongo_collection.find():
+        documents.append(document)
+    return documents
