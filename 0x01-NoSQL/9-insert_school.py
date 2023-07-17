@@ -18,4 +18,4 @@ def insert_school(mongo_collection, **kwargs) -> str:
     Returns:
         str: id of the inserted school
     """
-    return str(mongo_collection.insert_one(kwargs).inserted_id)
+    return str(mongo_collection.insert(kwargs))
