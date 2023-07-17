@@ -21,7 +21,7 @@ if __name__ == "__main__":
     print(f"{total_logs} logs")
 
     """Methods count"""
-    methods = logs_collection.distinct("method")
+    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
     print("Methods:")
     for method in methods:
         count = logs_collection.count_documents({"method": method})
@@ -35,10 +35,21 @@ if __name__ == "__main__":
 
     """Top 10 IPs count"""
     top_ips = logs_collection.aggregate([
-        {"$group": {"_id": "$ip", "count": {"$sum": 1}}},
+        {"$group":
+         {
+             "_id": "$ip",
+             "count": {"$sum": 1}
+             }
+         },
         {"$sort": {"count": -1}},
-        {"$limit": 10}
+        {"$limit": 10},
+        {"$project": {
+            "_id": 0,
+            "count": 1
+            }}
     ])
     print("IPs:")
     for ip in top_ips:
-        print(f"\t{ip['_id']}: {ip['count']}")
+        ip = ip.get("ip")
+        count = ip.get("count")
+        print(f"\t{ip}: {count}")
