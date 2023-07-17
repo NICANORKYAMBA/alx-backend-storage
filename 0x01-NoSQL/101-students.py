@@ -5,11 +5,9 @@ Created on Mon July  17 17:00:00 2023
 
 @Author: Nicanor Kyamba
 """
-from typing import List
-from pymongo.collection import Collection
 
 
-def top_students(mongo_collection: Collection) -> List[dict]:
+def top_students(mongo_collection):
     """Returns the top 10 students with the highest average score.
 
     Args:
