@@ -5,11 +5,9 @@ Created on Mon July  17 14:54:00 2023
 
 @Author: Nicanor Kyamba
 """
-from typing import List
-from pymongo.collection import Collection
 
 
-def schools_by_topic(mongo_collection: Collection, topic: str) -> List:
+def schools_by_topic(mongo_collection, topic: str):
     """
     Returns a list of schools that have a certain topic.
 
