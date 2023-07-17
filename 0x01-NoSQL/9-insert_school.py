@@ -7,7 +7,7 @@ Created on Mon July 17 14:32:00 2023
 """
 
 
-def insert_school(mongo_collection, **kwargs) -> str:
+def insert_school(mongo_collection, **kwargs):
     """
     Insert a school
 
@@ -18,4 +18,4 @@ def insert_school(mongo_collection, **kwargs) -> str:
     Returns:
         str: id of the inserted school
     """
-    return str(mongo_collection.insert(kwargs))
+    return mongo_collection.insert(kwargs)
