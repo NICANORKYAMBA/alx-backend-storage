@@ -5,10 +5,9 @@ Created on Mon July 17 14:32:00 2023
 
 @Author: Nicanor Kyamba
 """
-from pymongo.collection import Collection
 
 
-def insert_school(mongo_collection: Collection, **kwargs) -> str:
+def insert_school(mongo_collection, **kwargs) -> str:
     """
     Insert a school
 
