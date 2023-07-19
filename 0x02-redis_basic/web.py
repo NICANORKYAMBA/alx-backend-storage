@@ -10,21 +10,26 @@ import redis
 import requests
 from typing import Callable
 
-redis_ = redis.Redis()
+r = redis.Redis()
 
 
 def count_requests(method: Callable) -> Callable:
-    """ Decortator for counting """
+    """ Decorator for counting """
     @wraps(method)
     def wrapper(url):  # sourcery skip: use-named-expression
         """ Wrapper for decorator """
-        redis_.incr(f"count:{url}")
-        cached_html = redis_.get(f"cached:{url}")
-        if cached_html:
-            return cached_html.decode('utf-8')
-        html = method(url)
-        redis_.setex(f"cached:{url}", 10, html)
-        return html
+        key = "cached:" + url
+        cached = r.get(key)
+        if cached:
+            return cached.decode('utf-8')
+
+        key_count = "count:" + url
+        result = method(url)
+
+        r.incr(key_count)
+        r.set(key, result, ex=10)
+        r.expire(key, 10)
+        return result
 
     return wrapper
 
@@ -34,3 +39,7 @@ def get_page(url: str) -> str:
     """ Obtain the HTML content of a  URL """
     req = requests.get(url)
     return req.text
+
+
+if __name__ == "__main__":
+    print(get_page("http://slowwly.robertomurray.co.uk"))
