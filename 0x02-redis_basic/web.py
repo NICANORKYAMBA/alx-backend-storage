@@ -13,6 +13,7 @@ redis_client = redis.Redis()
 
 
 def count_requests(method):
+    """ Decorator for counting """
     @wraps(method)
     def wrapper(url):
         key_count = f"count:{url}"
@@ -34,6 +35,7 @@ def count_requests(method):
 
 @count_requests
 def get_page(url: str) -> str:
+    """ Obtain the HTML content of a  URL """
     response = requests.get(url)
     return response.text
 
