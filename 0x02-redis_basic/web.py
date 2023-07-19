@@ -5,15 +5,14 @@ Created on Wed July  19 19:00:00 2023
 
 @Author: Nicanor Kyamba
 """
-from functools import wraps
 import redis
 import requests
-from typing import Callable
+from functools import wraps
 
 r = redis.Redis()
 
 
-def count_requests(method: Callable) -> Callable:
+def count_requests(method):
     """ Decorator for counting """
     @wraps(method)
     def wrapper(url):  # sourcery skip: use-named-expression
