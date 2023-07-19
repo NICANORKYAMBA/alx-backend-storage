@@ -5,9 +5,38 @@ Created on Wed July  19 12:40:00 2023
 
 @Author: Nicanor Kyamba
 """
+import functools
 import uuid
 from typing import Union, Callable, Optional
 import redis
+
+
+def count_calls(method: Callable) -> Callable:
+    """
+    Decorator to count the number of times a method is called
+
+    Args:
+        method (Callable): The method to be decorated
+
+    Returns:
+        Callable: The decorated method
+    """
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """
+        Wrapper to count the number of times a method is called
+
+        Args:
+            *args (Any): The positional arguments
+            **kwargs (Any): The keyword arguments
+
+        Returns:
+            Callable: The decorated method
+        """
+        random_key = method.__qualname__
+        self._redis.incr(random_key)
+        return method(self, *args, **kwargs)
+    return wrapper
 
 
 class Cache:
@@ -17,6 +46,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Store data in cache"""
         random_key = str(uuid.uuid4())
