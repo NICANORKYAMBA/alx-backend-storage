@@ -5,40 +5,39 @@ Created on Wed July  19 19:00:00 2023
 
 @Author: Nicanor Kyamba
 """
+from functools import wraps
 import redis
 import requests
-from functools import wraps
 
-r = redis.Redis()
+redis_client = redis.Redis()
 
 
-def url_access_count(method):
-    """ Decorator for counting """
+def count_requests(method):
     @wraps(method)
     def wrapper(url):
-        """ Wrapper for decorator """
-        key = "cached:" + url
-        cached_value = r.get(key)
-        if cached_value:
-            return cached_value.decode("utf-8")
+        key_count = f"count:{url}"
+        key_cached = f"cached:{url}"
 
-            # Get new content and update cache
-        key_count = "count:" + url
+        cached_value = redis_client.get(key_cached)
+        if cached_value:
+            return cached_value.decode('utf-8')
+
         html_content = method(url)
 
-        r.incr(key_count)
-        r.set(key, html_content, ex=10)
-        r.expire(key, 10)
+        redis_client.incr(key_count)
+        redis_client.setex(key_cached, 10, html_content)
+
         return html_content
+
     return wrapper
 
 
-@url_access_count
+@count_requests
 def get_page(url: str) -> str:
-    """ Obtain the HTML content of a  URL """
-    results = requests.get(url)
-    return results.text
+    response = requests.get(url)
+    return response.text
 
 
-if __name__ == "__main__":
-    get_page('http://slowwly.robertomurray.co.uk')
+if __name__ == '__main__':
+    URL = 'http://slowwly.robertomurray.co.uk'
+    print(get_page(URL))
