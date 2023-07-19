@@ -12,33 +12,33 @@ from functools import wraps
 r = redis.Redis()
 
 
-def count_requests(method):
+def url_access_count(method):
     """ Decorator for counting """
     @wraps(method)
-    def wrapper(url):  # sourcery skip: use-named-expression
+    def wrapper(url):
         """ Wrapper for decorator """
         key = "cached:" + url
-        cached = r.get(key)
-        if cached:
-            return cached.decode('utf-8')
+        cached_value = r.get(key)
+        if cached_value:
+            return cached_value.decode("utf-8")
 
+            # Get new content and update cache
         key_count = "count:" + url
-        result = method(url)
+        html_content = method(url)
 
         r.incr(key_count)
-        r.set(key, result, ex=10)
+        r.set(key, html_content, ex=10)
         r.expire(key, 10)
-        return result
-
+        return html_content
     return wrapper
 
 
-@count_requests
+@url_access_count
 def get_page(url: str) -> str:
     """ Obtain the HTML content of a  URL """
-    req = requests.get(url)
-    return req.text
+    results = requests.get(url)
+    return results.text
 
 
 if __name__ == "__main__":
-    print(get_page("http://slowwly.robertomurray.co.uk"))
+    get_page('http://slowwly.robertomurray.co.uk')
