@@ -36,7 +36,7 @@ def count_requests(method):
 @count_requests
 def get_page(url: str) -> str:
     """ Obtain the HTML content of a  URL """
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)
     return response.text
 
 
